@@ -70,8 +70,12 @@ let app = new Vue({
             let filtered = this.activities;
 
             if (this.searchQuery) {
+                const query = this.searchQuery.toLowerCase();
                 filtered = filtered.filter(activity =>
-                    activity.title.toLowerCase().includes(this.searchQuery.toLowerCase())
+                    activity.title.toLowerCase().includes(query) ||
+                    activity.location.toLowerCase().includes(query) ||
+                    activity.day.toLowerCase().includes(query) ||
+                    activity.price.toString().includes(query)
                 );
             }
 
@@ -104,7 +108,6 @@ let app = new Vue({
         cartDetails() {
             if (this.cart.length === 0) return [];
             
-            // Create a map to count quantities
             const counts = {};
             this.cart.forEach(id => {
                 counts[id] = (counts[id] || 0) + 1;

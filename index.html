@@ -39,7 +39,7 @@
                 <p>Location: {{ activity.location }}</p>
                 <p>Day: {{ activity.day }}</p>
                 <p>Price: {{ activity.price }}</p>
-                <p>Available Stock: {{ activity.availableInventory }}</p>
+                <p>Available Stock: {{ activity.availableInventory - cartCount(activity._id) }}</p>
                 <button 
                     type="submit" 
                     v-on:click="addToCart(activity)" 
