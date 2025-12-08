@@ -118,15 +118,7 @@ let app = new Vue({
         filteredActivities() {
             let filtered = this.activities;
 
-            if (this.searchQuery) {
-                const query = this.searchQuery.toLowerCase();
-                filtered = filtered.filter(activity =>
-                    activity.title.toLowerCase().includes(query) ||
-                    activity.location.toLowerCase().includes(query) ||
-                    activity.day.toLowerCase().includes(query) ||
-                    activity.price.toString().includes(query)
-                );
-            }
+            // Client-side filtering removed in favor of backend search watcher
 
             if (this.sortOption === 'price-asc') {
                 filtered.sort((a, b) => parseFloat(a.price) - parseFloat(b.price));
@@ -145,6 +137,22 @@ let app = new Vue({
             return filtered;
         }
        
+    },
+    watch: {
+        searchQuery(val) {
+            if (val) {
+                fetch(`https://mdxbackshop-cle9.onrender.com/collection/lessons/search?q=${val}`)
+                .then(response => response.json())
+                .then(json => {
+                    this.activities = json;
+                })
+                .catch(err => {
+                    console.error('Error searching:', err);
+                });
+            } else {
+                this.loadProducts();
+            }
+        }
     },
     computed: {
         cartItemCount() {
