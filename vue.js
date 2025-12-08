@@ -13,7 +13,8 @@ let app = new Vue({
         },
         cart: [],
         searchQuery: '',
-        sortOption: 'default'
+        sortOption: 'default',
+        showCheckout: false
     },
     created() {
         // Fetch activities from the backend
@@ -38,6 +39,33 @@ let app = new Vue({
         },
         cartCount(id) {
             return this.cart.filter(itemId => itemId === id).length;
+        },
+        toggleCheckout() {
+            this.showCheckout = !this.showCheckout;
+        },
+        submitOrder() {
+            const newOrder = {
+                ...this.order,
+                cart: this.cart
+            };
+            
+            fetch('https://mdxbackshop-cle9.onrender.com/collection/orders', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(newOrder)
+            })
+            .then(response => response.json())
+            .then(json => {
+                alert('Order submitted!');
+                this.cart = [];
+                this.showCheckout = false;
+            })
+            .catch(error => {
+                console.error('Error submitting order:', error);
+                alert('Failed to submit order');
+            });
         },
         filteredActivities() {
             let filtered = this.activities;
@@ -64,6 +92,15 @@ let app = new Vue({
     computed: {
         cartItemCount() {
             return this.cart.length;
+        },
+        isOrderValid() {
+            return this.order.fullName && 
+                   this.order.email && 
+                   this.order.telephone && 
+                   this.order.country && 
+                   this.order.city && 
+                   this.order.address && 
+                   this.cart.length > 0;
         }
     }
 });

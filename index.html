@@ -16,7 +16,8 @@
             </button>
         </header>
 
-        <div>
+        <div v-if="!showCheckout">
+            <div>
             <input 
                 type="text" 
                 v-model="searchQuery" 
@@ -56,8 +57,9 @@
                 <img :src="activity.image" :alt="`Image of ${activity.title}`" class="activity-image">
             </div>
         </div>
+        </div>
 
-        <div v-show="showCheckout">
+        <div v-else>
             <h2>Checkout</h2>
             <p>
             <label for="fullName">Full Name:</label>
