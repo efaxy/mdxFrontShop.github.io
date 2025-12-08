@@ -34,7 +34,7 @@
         </div>
         
         <div class="activities-container">
-            <div v-for="activity in filteredActivities()" :key="activity.id" class="activity">
+            <div v-for="activity in filteredActivities()" :key="activity._id" class="activity">
                 <h2 v-text="activity.title"></h2>
                 <p>Location: {{ activity.location }}</p>
                 <p>Day: {{ activity.day }}</p>
@@ -48,9 +48,9 @@
                 </button>
                 <button disabled="disabled" type="submit" v-else>Can't Add to Cart</button>
             
-                <span v-if="activity.availableInventory === cartCount(activity.id)">All Out!</span>
-                <span v-else-if="activity.availableInventory - cartCount(activity.id) < 5">
-                    Only {{ activity.availableInventory - cartCount(activity.id) }} left!
+                <span v-if="activity.availableInventory === cartCount(activity._id)">All Out!</span>
+                <span v-else-if="activity.availableInventory - cartCount(activity._id) < 5">
+                    Only {{ activity.availableInventory - cartCount(activity._id) }} left!
                 </span>
                 <span v-else>Buy Now!</span>
             
@@ -61,6 +61,25 @@
 
         <div v-else>
             <h2>Checkout</h2>
+            
+            <div class="cart-summary" v-if="cartDetails.length > 0">
+                <h3>Items in Cart</h3>
+                <ul>
+                    <li v-for="item in cartDetails" :key="item._id" style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                        <img :src="item.image" :alt="item.title" style="width: 50px; height: 50px; object-fit: cover;">
+                        <div>
+                            <strong>{{ item.title }}</strong>
+                            <p>Quantity: {{ item.quantity }} x {{ item.price }}</p>
+                        </div>
+                    </li>
+                </ul>
+                <p><strong>Total: {{ cartTotal }} $</strong></p>
+                <hr>
+            </div>
+            <div v-else>
+                <p>Your cart is empty.</p>
+            </div>
+
             <p>
             <label for="fullName">Full Name:</label>
             <input id="fullName" v-model.trim="order.fullName">

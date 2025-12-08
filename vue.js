@@ -17,8 +17,7 @@ let app = new Vue({
         showCheckout: false
     },
     created() {
-        // Fetch activities from the backend
-        // Replace this URL with your actual API endpoint
+        
         fetch('https://mdxbackshop-cle9.onrender.com/collection/lessons')
             .then(response => response.json())
             .then(json => {
@@ -31,11 +30,11 @@ let app = new Vue({
     methods: {
         addToCart(activity) {
             if (this.canAddToCart(activity)) {
-                this.cart.push(activity.id);
+                this.cart.push(activity._id);
             }
         },
         canAddToCart(activity) {
-            return activity.availableInventory > this.cartCount(activity.id);
+            return activity.availableInventory > this.cartCount(activity._id);
         },
         cartCount(id) {
             return this.cart.filter(itemId => itemId === id).length;
@@ -101,6 +100,31 @@ let app = new Vue({
                    this.order.city && 
                    this.order.address && 
                    this.cart.length > 0;
+        },
+        cartDetails() {
+            if (this.cart.length === 0) return [];
+            
+            // Create a map to count quantities
+            const counts = {};
+            this.cart.forEach(id => {
+                counts[id] = (counts[id] || 0) + 1;
+            });
+            
+        
+            return Object.keys(counts).map(id => {
+                const activity = this.activities.find(act => act._id == id);
+                if (!activity) return null;
+                
+                return {
+                    ...activity,
+                    quantity: counts[id]
+                };
+            }).filter(item => item !== null);
+        },
+        cartTotal() {
+            return this.cartDetails.reduce((total, item) => {
+                return total + (item.price * item.quantity);
+            }, 0);
         }
     }
 });
