@@ -33,6 +33,12 @@ let app = new Vue({
                 this.cart.push(activity._id);
             }
         },
+        removeFromCart(id) {
+            const index = this.cart.indexOf(id);
+            if (index > -1) {
+                this.cart.splice(index, 1);
+            }
+        },
         canAddToCart(activity) {
             return activity.availableInventory > this.cartCount(activity._id);
         },
@@ -87,6 +93,10 @@ let app = new Vue({
                 filtered.sort((a, b) => a.title.localeCompare(b.title));
             } else if (this.sortOption === 'z-a') {
                 filtered.sort((a, b) => b.title.localeCompare(a.title));
+            } else if (this.sortOption === 'stock-asc') {
+                filtered.sort((a, b) => a.availableInventory - b.availableInventory);
+            } else if (this.sortOption === 'stock-desc') {
+                filtered.sort((a, b) => b.availableInventory - a.availableInventory);
             }
 
             return filtered;
