@@ -4,6 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>After School Activities</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;500;700&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
     <script src="https://cdn.jsdelivr.net/npm/vue@2.7.16/dist/vue.js"></script>
     <link rel="stylesheet" href="styles.css">
 </head>
@@ -12,12 +19,13 @@
         <header>
             <h1 v-text="sitename"></h1>
             <button v-on:click="toggleCheckout">
-                <p>CheckOut: {{ cartItemCount }}</p>
+                <i class="fas fa-shopping-cart"></i>
+                <p>Checkout ({{ cartItemCount }})</p>
             </button>
         </header>
 
         <div v-if="!showCheckout">
-            <div>
+            <div class="controls-bar">
             <input 
                 type="text" 
                 v-model="searchQuery" 
@@ -66,7 +74,7 @@
         </div>
         </div>
 
-        <div v-else>
+        <div v-else class="checkout-container">
             <h2>Checkout</h2>
             
             <div class="cart-summary" v-if="cartDetails.length > 0">
@@ -88,35 +96,37 @@
                 <p>Your cart is empty.</p>
             </div>
 
-            <p>
-            <label for="fullName">Full Name:</label>
-            <input id="fullName" v-model.trim="order.fullName">
-            </p>
+            <div class="checkout-form">
+                <div class="form-group">
+                    <label for="fullName">Full Name:</label>
+                    <input id="fullName" v-model.trim="order.fullName">
+                </div>
 
-            <p>
-            <label for="email">Gmail (Email):</label>
-            <input id="email" v-model="order.email"/>
-            </p>
+                <div class="form-group">
+                    <label for="email">Gmail (Email):</label>
+                    <input id="email" v-model="order.email"/>
+                </div>
 
-            <p>
-            <label for="telephone">Telephone:</label>
-            <input id="telephone" v-model.trim="order.telephone"/>
-            </p>
+                <div class="form-group">
+                    <label for="telephone">Telephone:</label>
+                    <input id="telephone" v-model.trim="order.telephone"/>
+                </div>
 
-            <p>
-            <label for="country">Country:</label>
-            <input id="country" v-model="order.country"/>
-            </p>
+                <div class="form-group">
+                    <label for="country">Country:</label>
+                    <input id="country" v-model="order.country"/>
+                </div>
 
-            <p>
-            <label for="city">City:</label>
-            <input id="city" v-model="order.city"/>
-            </p>
+                <div class="form-group">
+                    <label for="city">City:</label>
+                    <input id="city" v-model="order.city"/>
+                </div>
 
-            <p>
-            <label for="address">Address:</label>
-            <input id="address" v-model="order.address"/>
-            </p>
+                <div class="form-group">
+                    <label for="address">Address:</label>
+                    <input id="address" v-model="order.address"/>
+                </div>
+            </div>
 
             <button v-on:click="submitOrder" :disabled="!isOrderValid">Submit</button>
 
